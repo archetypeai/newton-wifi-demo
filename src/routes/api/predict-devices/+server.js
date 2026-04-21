@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { runQuery } from '$lib/server/newton.js';
+import { redactOnline } from '$lib/server/frame.js';
 
 const SYSTEM_PROMPT = [
 	'You are a home WiFi gateway analyst. For each device in the snapshot, INFER',
@@ -24,21 +25,6 @@ const SYSTEM_PROMPT = [
 
 const USER_PROMPT_PREFIX =
 	'Classify each device in this WiFi snapshot (online state has been withheld — infer it).\n\nSnapshot (JSON):\n';
-
-/**
- * Strip the `online` field from every device so Newton has to infer it.
- * Everything else (bytes, packets, flows, protocols) stays.
- */
-function redactOnline(frame) {
-	return {
-		...frame,
-		devices: frame.devices.map((d) => {
-			// eslint-disable-next-line no-unused-vars
-			const { online: _online, ...rest } = d;
-			return rest;
-		})
-	};
-}
 
 const LINE_RE =
 	/^\s*(Device\s+[A-Z]+)\s*:\s*(online_active|online_idle|offline)\s*\|\s*([\d.]+)\s*\|\s*(.+?)\s*$/i;

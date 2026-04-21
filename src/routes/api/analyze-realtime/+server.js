@@ -1,17 +1,20 @@
 import { json } from '@sveltejs/kit';
 import { runQuery } from '$lib/server/newton.js';
+import { redactOnline } from '$lib/server/frame.js';
 
 function buildSystemPrompt(windowSec) {
 	return [
 		`You are a home-occupancy inference AI analyzing a rolling ${windowSec}-second window of`,
 		'WiFi device-telemetry from a residential gateway. Every MAC is anonymized — device',
-		'types are not labeled. Reason from traffic patterns alone: active interactive',
-		'sessions (HTTP/HTTPS/streaming) suggest a person is using a device; periodic',
-		'low-byte background chatter (DNS, mDNS, NTP) is consistent with idle devices;',
-		'multiple devices active in the same window increases the likelihood someone is',
-		`home. This is a SHORT ${windowSec}-second window — byte counts and flow counts will be`,
-		'correspondingly small; calibrate your confidence accordingly. Be concise,',
-		'direct, and hedge only when the signal is genuinely ambiguous.'
+		'types are not labeled, and the per-device `online` flag has been withheld:',
+		'infer online state from the flow/byte/protocol evidence. Reason from traffic',
+		'patterns alone: active interactive sessions (HTTP/HTTPS/streaming) suggest a',
+		'person is using a device; periodic low-byte background chatter (DNS, mDNS, NTP)',
+		'is consistent with idle devices; multiple devices active in the same window',
+		`increases the likelihood someone is home. This is a SHORT ${windowSec}-second window —`,
+		'byte counts and flow counts will be correspondingly small; calibrate your',
+		'confidence accordingly. Be concise, direct, and hedge only when the signal is',
+		'genuinely ambiguous.'
 	].join(' ');
 }
 
@@ -40,7 +43,7 @@ export async function POST({ request }) {
 		const userQuery =
 			(query || buildDefaultQuery(windowSec)) +
 			`\n\nSnapshot (JSON, ${windowSec}-second rolling window):\n` +
-			JSON.stringify(frame);
+			JSON.stringify(redactOnline(frame));
 
 		const analysis = await runQuery({
 			query: userQuery,

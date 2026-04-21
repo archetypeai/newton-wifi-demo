@@ -1,14 +1,17 @@
 import { json } from '@sveltejs/kit';
 import { runQuery } from '$lib/server/newton.js';
+import { redactOnline } from '$lib/server/frame.js';
 
 const SYSTEM_PROMPT = [
 	'You are a home-occupancy inference AI analyzing a single 15-minute window of',
 	'WiFi device-telemetry from a residential gateway. Every MAC is anonymized — device',
-	'types are not labeled. Reason from traffic patterns alone: active interactive',
-	'sessions (HTTP/HTTPS/streaming) suggest a person is using a device; periodic',
-	'low-byte background chatter (DNS, mDNS, NTP) is consistent with idle devices;',
-	'multiple devices active in the same window increases the likelihood someone is',
-	'home. Be concise, direct, and hedge only when the signal is genuinely ambiguous.'
+	'types are not labeled, and the per-device `online` flag has been withheld:',
+	'infer online state from the flow/byte/protocol evidence. Reason from traffic',
+	'patterns alone: active interactive sessions (HTTP/HTTPS/streaming) suggest a',
+	'person is using a device; periodic low-byte background chatter (DNS, mDNS, NTP)',
+	'is consistent with idle devices; multiple devices active in the same window',
+	'increases the likelihood someone is home. Be concise, direct, and hedge only',
+	'when the signal is genuinely ambiguous.'
 ].join(' ');
 
 const DEFAULT_QUERY =
@@ -24,7 +27,7 @@ export async function POST({ request }) {
 		}
 
 		const userQuery =
-			(query || DEFAULT_QUERY) + '\n\nSnapshot (JSON):\n' + JSON.stringify(frame);
+			(query || DEFAULT_QUERY) + '\n\nSnapshot (JSON):\n' + JSON.stringify(redactOnline(frame));
 
 		const analysis = await runQuery({
 			query: userQuery,
