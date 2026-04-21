@@ -6,7 +6,7 @@ The app walks through a real 10-day smart-home WiFi capture one window at a time
 
 ## Two playback modes
 
-- **15-min** — aggregated 15-minute snapshots matching the cadence of a Comcast-style `wifi_status_report`. Auto-advance through the 61 windows with any device activity, or scrub the full 962-window session.
+- **15-min** — aggregated 15-minute snapshots matching the cadence of a typical residential-gateway `wifi_status_report`. Auto-advance through the 61 windows with any device activity, or scrub the full 962-window session.
 - **Realtime** — rolling window whose width tracks the analysis cadence (1 s / 2 s / 5 s / 10 s / 30 s). Newton fires on a wall-clock tick, reasoning over a fresh, non-overlapping slice each call.
 
 ## Data attribution
@@ -122,7 +122,7 @@ data/                                     # git-ignored
 
 ## Customer context
 
-This demo is modeled after the per-device telemetry Comcast gateways already emit (`wifi_status_report`) — a periodic JSON block listing every connected device with online state, RSSI, and traffic counters. GHOST-IoT doesn't include RSSI, device-type metadata, or set-top-box interaction events, so those fields are absent from this demo. The narrative: *"Newton reasons about occupancy from the data your gateway already produces — no new sensors, no wearables, no cameras."*
+This demo is modeled after the per-device telemetry residential ISP gateways already emit (`wifi_status_report`) — a periodic JSON block listing every connected device with online state, RSSI, and traffic counters. GHOST-IoT doesn't include RSSI, device-type metadata, or set-top-box interaction events, so those fields are absent from this demo. The narrative: *"Newton reasons about occupancy from the data your gateway already produces — no new sensors, no wearables, no cameras."*
 
 ## Acknowledgements
 
