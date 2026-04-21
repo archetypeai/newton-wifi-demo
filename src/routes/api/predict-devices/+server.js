@@ -2,16 +2,19 @@ import { json } from '@sveltejs/kit';
 import { runQuery } from '$lib/server/newton.js';
 
 const SYSTEM_PROMPT = [
-	'You are a home WiFi gateway analyst. For each device in the snapshot,',
-	'output ONE line in this EXACT format:',
+	'You are a home WiFi gateway analyst. For each device in the snapshot, INFER',
+	'whether it is online and classify its activity. The online/offline state is',
+	"NOT provided — you must derive it from the per-device traffic evidence.",
+	'',
+	'Output ONE line per device in this EXACT format:',
 	'',
 	'DEVICE_LABEL: VERDICT | CONFIDENCE | REASON',
 	'',
 	'Where:',
 	'- VERDICT is exactly one of: online_active, online_idle, offline',
-	'  · online_active = flows + >10 KB traffic + user-interactive protocols (HTTPS/HTTP/streaming)',
+	'  · online_active = flows present + >10 KB traffic + user-interactive protocols (HTTPS/HTTP/streaming)',
 	'  · online_idle   = flows present but only background chatter (DNS/mDNS/NTP/DHCP) and minimal bytes',
-	'  · offline       = zero flows in the window',
+	'  · offline       = no flows observed in the window',
 	'- CONFIDENCE is a decimal 0.0–1.0',
 	'- REASON is a short phrase (no pipe characters, under 120 chars)',
 	'',
@@ -19,7 +22,23 @@ const SYSTEM_PROMPT = [
 	'No preamble. No trailing commentary. No markdown. No code fences.'
 ].join('\n');
 
-const USER_PROMPT_PREFIX = 'Classify each device in this WiFi snapshot.\n\nSnapshot (JSON):\n';
+const USER_PROMPT_PREFIX =
+	'Classify each device in this WiFi snapshot (online state has been withheld — infer it).\n\nSnapshot (JSON):\n';
+
+/**
+ * Strip the `online` field from every device so Newton has to infer it.
+ * Everything else (bytes, packets, flows, protocols) stays.
+ */
+function redactOnline(frame) {
+	return {
+		...frame,
+		devices: frame.devices.map((d) => {
+			// eslint-disable-next-line no-unused-vars
+			const { online: _online, ...rest } = d;
+			return rest;
+		})
+	};
+}
 
 const LINE_RE =
 	/^\s*(Device\s+[A-Z]+)\s*:\s*(online_active|online_idle|offline)\s*\|\s*([\d.]+)\s*\|\s*(.+?)\s*$/i;
@@ -61,7 +80,7 @@ export async function POST({ request }) {
 		}
 
 		const raw = await runQuery({
-			query: USER_PROMPT_PREFIX + JSON.stringify(frame),
+			query: USER_PROMPT_PREFIX + JSON.stringify(redactOnline(frame)),
 			systemPrompt: SYSTEM_PROMPT,
 			maxNewTokens: 512
 		});
