@@ -1,0 +1,62 @@
+[
+  {
+    "timestamp": "2026-02-06T10:57:17.747432",
+    "frame_number": 1,
+    "response_time_seconds": 63.071,
+    "request": {
+      "type": "model.query",
+      "event_data": {
+        "model_version": "Newton::c2_3_7b_2508014e10af56",
+        "template_name": "image_qa_template_task",
+        "instruction": "Answer the following question about the image:",
+        "focus": "webcam_frame.py",
+        "max_new_tokens": 512,
+        "data": "[IMAGE DATA OMITTED]"
+      }
+    },
+    "response": {
+      "type": "model.query.response",
+      "message": "Response timed out for query"
+    }
+  },
+  {
+    "timestamp": "2026-02-06T10:57:26.154989",
+    "frame_number": 2,
+    "response_time_seconds": 1.968,
+    "request": {
+      "type": "model.query",
+      "event_data": {
+        "model_version": "Newton::c2_3_7b_2508014e10af56",
+        "template_name": "image_qa_template_task",
+        "instruction": "Answer the following question about the image:",
+        "focus": "webcam_frame.py",
+        "max_new_tokens": 512,
+        "data": "[IMAGE DATA OMITTED]"
+      }
+    },
+    "response": {
+      "type": "error",
+      "message": "Unknown session id: lsn-26020627e21501c0bdb5a9082b8cdd"
+    }
+  },
+  {
+    "timestamp": "2026-02-06T10:57:42.701721",
+    "frame_number": 3,
+    "response_time_seconds": 10.079,
+    "request": {
+      "type": "model.query",
+      "event_data": {
+        "model_version": "Newton::c2_3_7b_2508014e10af56",
+        "template_name": "image_qa_template_task",
+        "instruction": "Answer the following question about the image:",
+        "focus": "webcam_frame.py",
+        "max_new_tokens": 512,
+        "data": "[IMAGE DATA OMITTED]"
+      }
+    },
+    "response": {
+      "type": "error",
+      "message": "Unknown session id: lsn-26020627e21501c0bdb5a9082b8cdd"
+    }
+  }
+]
