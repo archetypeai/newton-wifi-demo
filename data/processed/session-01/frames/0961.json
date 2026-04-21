@@ -1,0 +1,120 @@
+{
+  "window_index": 961,
+  "window_start": "2019-10-20T18:43:33+00:00",
+  "window_end": "2019-10-20T18:58:33+00:00",
+  "window_start_epoch": 1571597013.0,
+  "gateway_mac": "13d35af5c06b",
+  "devices": [
+    {
+      "mac": "d96b0fddf228",
+      "label": "Device A",
+      "online": true,
+      "up_bytes_quarter": 14994,
+      "down_bytes_quarter": 32539,
+      "up_packets_quarter": 155,
+      "down_packets_quarter": 153,
+      "flows_quarter": 43,
+      "protocols": [
+        "DNS",
+        "HTTP",
+        "HTTPS",
+        "No_Payload",
+        "SSL/TLS"
+      ]
+    },
+    {
+      "mac": "e323b826aa71",
+      "label": "Device B",
+      "online": false,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 0,
+      "flows_quarter": 0,
+      "protocols": []
+    },
+    {
+      "mac": "824ec8a8e2da",
+      "label": "Device C",
+      "online": true,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 726,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 30,
+      "flows_quarter": 15,
+      "protocols": [
+        "Unknown_UDP"
+      ]
+    },
+    {
+      "mac": "ebd1a7fa8544",
+      "label": "Device D",
+      "online": true,
+      "up_bytes_quarter": 178,
+      "down_bytes_quarter": 42,
+      "up_packets_quarter": 1,
+      "down_packets_quarter": 2,
+      "flows_quarter": 3,
+      "protocols": [
+        "Unknown_UDP"
+      ]
+    },
+    {
+      "mac": "594cbdb38e7d",
+      "label": "Device E",
+      "online": false,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 0,
+      "flows_quarter": 0,
+      "protocols": []
+    },
+    {
+      "mac": "cec6ed3953d7",
+      "label": "Device F",
+      "online": true,
+      "up_bytes_quarter": 1490,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 10,
+      "down_packets_quarter": 0,
+      "flows_quarter": 2,
+      "protocols": [
+        "SSDP"
+      ]
+    },
+    {
+      "mac": "a9d4a81fc394",
+      "label": "Device G",
+      "online": false,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 0,
+      "flows_quarter": 0,
+      "protocols": []
+    },
+    {
+      "mac": "e7618ccb16b5",
+      "label": "Device H",
+      "online": false,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 0,
+      "flows_quarter": 0,
+      "protocols": []
+    },
+    {
+      "mac": "a6f4e9445c56",
+      "label": "Device I",
+      "online": false,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 0,
+      "flows_quarter": 0,
+      "protocols": []
+    }
+  ]
+}

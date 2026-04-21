@@ -47,24 +47,24 @@ The GHOST project was funded by the EU Horizon 2020 programme.
 npm install
 ```
 
-### 2. Fetch and preprocess the dataset
+### 2. (Optional) re-run preprocessing
+
+The processed dataset is committed to the repo, so the demo runs without any preprocessing step. The GHOST-IoT WiFi flow CSV (`wlan0_ipv4_flows_db.csv`) is also included at `data/ghost-iot/` so you can re-run the preprocessor if you edit it:
 
 ```bash
-# Clone GHOST-IoT into data/ghost-iot (the path the preprocessor expects)
-mkdir -p data
-git clone https://github.com/gspathoulas/ghost-iot-dataset.git data/ghost-iot
-
-# Extract the compressed CSVs (requires unrar — `brew install rar` on macOS)
-cd data/ghost-iot && unrar x data.rar && cd ../..
-
-# Aggregate into 15-min snapshot frames + flat event stream
 python3 scripts/preprocess.py
 ```
 
-This writes:
+This regenerates:
 - `data/processed/session-01/manifest.json` — session metadata, device inventory, per-window activity, highlight list
 - `data/processed/session-01/frames/{0000..0961}.json` — one JSON per 15-min window
 - `data/processed/session-01/events.jsonl` — flat per-flow event stream (used by Realtime mode)
+
+For the complete GHOST-IoT dataset (Bluetooth, Zigbee, Ethernet, PPP interfaces — not used by this demo), clone the upstream repo:
+
+```bash
+git clone https://github.com/gspathoulas/ghost-iot-dataset.git
+```
 
 ### 3. Configure API credentials
 

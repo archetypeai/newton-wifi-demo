@@ -22,5 +22,11 @@ Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Datasets (raw + processed — large, never commit)
-/data/
+# GHOST-IoT raw files we don't use (keep only wlan0_ipv4_flows_db.csv)
+/data/ghost-iot/data.rar
+/data/ghost-iot/wlan0_ipv4_packets_db.csv
+/data/ghost-iot/bluetooth0_bt_*.csv
+/data/ghost-iot/zigbee0_zgb_*.csv
+/data/ghost-iot/rf8690_rf_*.csv
+/data/ghost-iot/ppp0_ppp_*.csv
+/data/ghost-iot/eth0_ipv4_*.csv

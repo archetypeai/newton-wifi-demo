@@ -1,0 +1,131 @@
+{
+  "window_index": 954,
+  "window_start": "2019-10-20T16:58:33+00:00",
+  "window_end": "2019-10-20T17:13:33+00:00",
+  "window_start_epoch": 1571590713.0,
+  "gateway_mac": "13d35af5c06b",
+  "devices": [
+    {
+      "mac": "d96b0fddf228",
+      "label": "Device A",
+      "online": false,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 0,
+      "flows_quarter": 0,
+      "protocols": []
+    },
+    {
+      "mac": "e323b826aa71",
+      "label": "Device B",
+      "online": true,
+      "up_bytes_quarter": 111238,
+      "down_bytes_quarter": 855562,
+      "up_packets_quarter": 1183,
+      "down_packets_quarter": 1187,
+      "flows_quarter": 108,
+      "protocols": [
+        "DHCP",
+        "DNS",
+        "HTTP",
+        "HTTPS",
+        "ICMP",
+        "No_Payload",
+        "Unknown_TCP",
+        "Unknown_UDP",
+        "WhatsApp"
+      ]
+    },
+    {
+      "mac": "824ec8a8e2da",
+      "label": "Device C",
+      "online": false,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 0,
+      "flows_quarter": 0,
+      "protocols": []
+    },
+    {
+      "mac": "ebd1a7fa8544",
+      "label": "Device D",
+      "online": true,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 1500,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 5,
+      "flows_quarter": 1,
+      "protocols": [
+        "DHCP"
+      ]
+    },
+    {
+      "mac": "594cbdb38e7d",
+      "label": "Device E",
+      "online": true,
+      "up_bytes_quarter": 10626,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 54,
+      "down_packets_quarter": 0,
+      "flows_quarter": 7,
+      "protocols": [
+        "Unsupported",
+        "mDNS"
+      ]
+    },
+    {
+      "mac": "cec6ed3953d7",
+      "label": "Device F",
+      "online": false,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 0,
+      "flows_quarter": 0,
+      "protocols": []
+    },
+    {
+      "mac": "a9d4a81fc394",
+      "label": "Device G",
+      "online": true,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 4,
+      "down_packets_quarter": 0,
+      "flows_quarter": 4,
+      "protocols": [
+        "Unsupported"
+      ]
+    },
+    {
+      "mac": "e7618ccb16b5",
+      "label": "Device H",
+      "online": true,
+      "up_bytes_quarter": 2277,
+      "down_bytes_quarter": 5999,
+      "up_packets_quarter": 31,
+      "down_packets_quarter": 23,
+      "flows_quarter": 10,
+      "protocols": [
+        "DHCP",
+        "DNS",
+        "HTTP",
+        "HTTPS",
+        "ICMP"
+      ]
+    },
+    {
+      "mac": "a6f4e9445c56",
+      "label": "Device I",
+      "online": false,
+      "up_bytes_quarter": 0,
+      "down_bytes_quarter": 0,
+      "up_packets_quarter": 0,
+      "down_packets_quarter": 0,
+      "flows_quarter": 0,
+      "protocols": []
+    }
+  ]
+}
