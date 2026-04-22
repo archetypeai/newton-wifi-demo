@@ -36,7 +36,7 @@ The GHOST project was funded by the EU Horizon 2020 programme.
 
 - **SvelteKit** with Svelte 5 runes
 - **Archetype AI Design System** — semantic tokens, primitives, patterns
-- **Newton `/v0.5/query` API** — JSON snapshot sent as text in the prompt; three separate endpoints (15-min analyze, realtime analyze, per-device predict) each with a purpose-built system prompt
+- **Newton `/v0.5/query` API** — JSON snapshot sent as text in the prompt; three SvelteKit server routes (15-min analyze, realtime analyze, per-device predict) all funnel through the same Newton endpoint with purpose-built system prompts (see [Newton API](#newton-api))
 - **Python** preprocessing (one-time) to reshape GHOST-IoT flows into snapshot frames + an event stream
 
 ## Setup
@@ -119,6 +119,62 @@ data/                                     # git-ignored
 3. **Realtime mode:** the client maintains a `rollingFrame` derived — events from `playhead − windowSec` to `playhead`, aggregated per device, with the same shape as a 15-min frame but `_window` field names. Every tick (configurable 1–30 s wall time), the current rolling frame is sent to `/api/analyze-realtime` and `/api/predict-devices`.
 4. Newton's responses are parsed client-side: the occupancy verdict via regex on the word list, per-device classifications via a strict line-based format the prompt asks for.
 5. Results render in the `ComparisonGrid` (per-device) and `AnalysisLog` (per-window history). Predictions are tagged with their source frame so stale answers don't pollute a newly-advanced view.
+
+## Newton API
+
+The app is a single-endpoint client of the Archetype AI Platform. All three Newton-backed SvelteKit routes (`/api/analyze`, `/api/analyze-realtime`, `/api/predict-devices`) funnel through the same Newton endpoint with different prompts.
+
+### Endpoint
+
+```
+POST {ATAI_API_ENDPOINT}/v0.5/query
+```
+
+Default base: `https://api.u1.archetypeai.app/`.
+
+### Headers
+
+```
+Authorization: Bearer {ATAI_API_KEY}
+Content-Type:  application/json
+```
+
+### Request body
+
+```json
+{
+  "query":              "<frame JSON + task-specific prompt>",
+  "system_prompt":      "<task instructions>",
+  "instruction_prompt": "<same as system_prompt>",
+  "file_ids":           [],
+  "model":              "Newton::c2_4_7b_251215a172f6d7",
+  "max_new_tokens":     400,
+  "sanitize":           false
+}
+```
+
+`max_new_tokens` is 400 for the two analyze routes and 512 for `predict-devices`.
+
+### Response shape
+
+Unwrapped tolerantly in `src/lib/server/newton.js` — any of:
+
+```
+{ response: { response: ["..."] } }   // primary shape
+{ response: ["..."] }
+{ response: "..." }
+{ text: "..." }
+```
+
+### Per-route specialization
+
+| SvelteKit route | System prompt gist | `max_new_tokens` | Output contract |
+|---|---|---|---|
+| `POST /api/analyze` | 15-min snapshot → one of `OCCUPIED` / `LIKELY_OCCUPIED` / `AMBIGUOUS` / `LIKELY_EMPTY` / `EMPTY` + one-sentence reason | 400 | free-form text; verdict regex-extracted client-side |
+| `POST /api/analyze-realtime` | same verdict space; prompt embeds actual window duration so confidence scales with 1–30 s windows | 400 | free-form text; verdict regex-extracted client-side |
+| `POST /api/predict-devices` | one line per device: `Device X: online_active\|online_idle\|offline \| <conf> \| <reason>` | 512 | strict per-line format, parsed into structured predictions server-side |
+
+The `online` boolean is stripped from every frame before it reaches Newton (`src/lib/server/frame.js`) — the model must infer presence from traffic alone.
 
 ## Customer context
 
