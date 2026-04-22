@@ -183,4 +183,3 @@ This demo is modeled after the per-device telemetry residential ISP gateways alr
 ## Acknowledgements
 
 - **Data:** [GHOST-IoT dataset](https://github.com/gspathoulas/ghost-iot-dataset) — Anagnostopoulos et al., *Sensors* 2020. Funded by EU Horizon 2020.
-- **Model:** [Newton](https://www.archetypeai.dev/) (C2.4 7B) via Archetype AI's Query API.
