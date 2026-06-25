@@ -144,16 +144,14 @@ Content-Type:  application/json
 ```json
 {
   "query":              "<frame JSON + task-specific prompt>",
-  "system_prompt":      "<task instructions>",
-  "instruction_prompt": "<same as system_prompt>",
+  "instruction_prompt": "<task instructions>",
   "file_ids":           [],
-  "model":              "Newton::c2_4_7b_251215a172f6d7",
-  "max_new_tokens":     400,
-  "sanitize":           false
+  "model":              "Newton::c2_6_8b_fp8_260424d7a55d5e",
+  "max_new_tokens":     400
 }
 ```
 
-`max_new_tokens` is 400 for the two analyze routes and 512 for `predict-devices`.
+The task instructions go in `instruction_prompt` — C 2.6 honors only this field; the legacy `system_prompt` is inert on this checkpoint, so it isn't sent (per the [`atai-newton-fusion-model`](https://github.com/archetypeai/agent-skills/tree/main/skills/atai-newton-fusion-model) skill). `max_new_tokens` is 400 for the two analyze routes and 512 for `predict-devices`.
 
 ### Response shape
 

@@ -1,7 +1,8 @@
 import { ATAI_API_KEY, ATAI_API_ENDPOINT } from '$env/static/private';
 
 const API_VERSION = 'v0.5';
-const MODEL = 'Newton::c2_4_7b_251215a172f6d7';
+// C 2.6 fusion checkpoint, per the atai-newton-fusion-model skill.
+const MODEL = 'Newton::c2_6_8b_fp8_260424d7a55d5e';
 const DEFAULT_TIMEOUT_MS = 60000;
 
 function queryUrl() {
@@ -36,13 +37,14 @@ export async function runQuery({
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
+				// The system turn goes in `instruction_prompt`. C 2.6 honors only this
+				// field; the legacy `system_prompt` is inert on this checkpoint, so we
+				// don't send it (per the atai-newton-fusion-model skill).
 				query,
-				system_prompt: systemPrompt,
 				instruction_prompt: systemPrompt,
 				file_ids: [],
 				model: MODEL,
-				max_new_tokens: maxNewTokens,
-				sanitize: false
+				max_new_tokens: maxNewTokens
 			}),
 			signal: controller.signal
 		});
