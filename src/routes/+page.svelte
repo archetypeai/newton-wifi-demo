@@ -36,7 +36,10 @@
 	let framePlaying = $state(false);
 	let framePlayTimer = $state(null);
 	let autoAnalyze = $state(true);
-	const FRAME_PLAY_INTERVAL_MS = 5000;
+	// Long enough to outlast a Newton round trip (~6–7s on C 2.6) so each window's
+	// per-device verdicts land and dwell before advancing. advanceFrame() also
+	// waits for any in-flight prediction/analysis (see its busy guard).
+	const FRAME_PLAY_INTERVAL_MS = 12000;
 
 	// ── realtime mode ─────────────────────────────────────────────────────────
 	let events = $state(null); // full event list
@@ -82,6 +85,10 @@
 
 	function advanceFrame() {
 		if (!manifest) return;
+		// Don't advance while this window's prediction/analysis is still running —
+		// otherwise the verdict would arrive for an already-replaced window and the
+		// per-device column would never settle (predictionsMatch stays false).
+		if (predictingBusy || busy) return;
 		const list =
 			highlightsOnly && manifest.highlights?.length
 				? manifest.highlights
@@ -423,22 +430,22 @@
 </svelte:head>
 
 {#snippet partnerSnippet()}
-	<span class="text-muted-foreground font-mono text-sm tracking-wider uppercase">
+	<span class="font-mono text-sm tracking-wider text-muted-foreground uppercase">
 		WiFi Occupancy
 	</span>
 {/snippet}
 
 <div
-	class="bg-background text-foreground grid h-screen w-screen grid-rows-[auto_1fr] overflow-hidden"
+	class="grid h-screen w-screen grid-rows-[auto_1fr] overflow-hidden bg-background text-foreground"
 >
 	<Menubar partnerLogo={partnerSnippet}>
 		<div class="flex items-center gap-3">
-			<div class="bg-muted flex items-center gap-0 rounded-xs p-0.5">
+			<div class="flex items-center gap-0 rounded-xs bg-muted p-0.5">
 				<button
 					type="button"
 					class={mode === 'frame'
-						? 'bg-background rounded-xs px-2.5 py-1 font-mono text-[11px]'
-						: 'text-muted-foreground hover:text-foreground px-2.5 py-1 font-mono text-[11px]'}
+						? 'rounded-xs bg-background px-2.5 py-1 font-mono text-[11px]'
+						: 'px-2.5 py-1 font-mono text-[11px] text-muted-foreground hover:text-foreground'}
 					onclick={() => switchMode('frame')}
 				>
 					15-min
@@ -446,8 +453,8 @@
 				<button
 					type="button"
 					class={mode === 'realtime'
-						? 'bg-background rounded-xs px-2.5 py-1 font-mono text-[11px]'
-						: 'text-muted-foreground hover:text-foreground px-2.5 py-1 font-mono text-[11px]'}
+						? 'rounded-xs bg-background px-2.5 py-1 font-mono text-[11px]'
+						: 'px-2.5 py-1 font-mono text-[11px] text-muted-foreground hover:text-foreground'}
 					onclick={() => switchMode('realtime')}
 				>
 					Realtime
@@ -456,9 +463,9 @@
 
 			{#if manifest}
 				<StatusBadge label="Newton" percentage={100} initial="N" />
-				<div class="text-muted-foreground hidden font-mono text-xs md:block">
+				<div class="hidden font-mono text-xs text-muted-foreground md:block">
 					GHOST-IoT
-					<span class="text-border px-1">·</span>
+					<span class="px-1 text-border">·</span>
 					{#if mode === 'frame'}
 						window #{currentIndex}/{manifest.n_windows - 1}
 					{:else}
@@ -504,20 +511,17 @@
 		</div>
 	</Menubar>
 
-	<main
-		id="main-content"
-		class="grid grid-cols-[2fr_1fr] gap-4 overflow-hidden p-4"
-	>
+	<main id="main-content" class="grid grid-cols-[2fr_1fr] gap-4 overflow-hidden p-4">
 		<h1 class="sr-only">Newton WiFi Occupancy Demo</h1>
 
 		{#if loadError}
 			<div class="col-span-2 flex items-center justify-center">
 				<div
-					class="border-destructive/30 bg-destructive/10 rounded-xs border p-6 font-mono text-sm"
+					class="rounded-xs border border-destructive/30 bg-destructive/10 p-6 font-mono text-sm"
 				>
-					<div class="text-destructive mb-2">Failed to load data</div>
+					<div class="mb-2 text-destructive">Failed to load data</div>
 					<div class="text-muted-foreground">{loadError}</div>
-					<div class="text-muted-foreground mt-3">
+					<div class="mt-3 text-muted-foreground">
 						Run <code class="bg-muted px-1">python3 scripts/preprocess.py</code> first.
 					</div>
 				</div>
